@@ -44,8 +44,6 @@ All chat functions will be disabled.\n"
 
 int processInput(int argc, char** argv, char **option, char **ip);
 
-int serverMode = 0;		// Global variable that defines whether this is a Client or a Server
-
 int main(int argc, char *argv[]) {
 	char *option = NULL;
 	char *ip = NULL;
@@ -88,13 +86,27 @@ int processInput(int argc, char** argv, char **option, char **ip) {
         return 1;
     }
 
+    if (!strcmp(*option, "--debug")) {
+    	if (argc < 3) {
+    		printf("%s\n", HELP);
+			exit(1);
+    	}
+    	printf("%s\n", "Verbose on.\n");
+		debugMode = 1;
+	}
+
     if (!strcmp(*option, "--help")) {
         printf("%s\n", HELP);
         exit(1);
     }
 
-    if (!strcmp(*option, "--server")) {
-    	if (argc > 2) {
+    if (!(strcmp(*option, "--server")&&strcmp(*ip, "--server"))) {
+    	if (!strcmp(*ip, "--debug")) {
+			printf("%s\n", "Verbose on.\n");
+			debugMode = 1;
+		}
+
+    	if (argc > 2 && ((argv[1][0] != '-') || (argv[2][0] != '-'))) {
 			printf("%s\n", HELP);
 			exit(1);
 		}

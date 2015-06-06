@@ -13,6 +13,9 @@
 
 #define DEFAULT_PORT 7013
 
+int debugMode = 0;
+int serverMode = 0;		// Global variable that defines whether this is a Client or a Server
+
 enum menu {
 	addContact = 1,
 	listContacts = 2,
