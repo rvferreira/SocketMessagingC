@@ -40,6 +40,7 @@ All chat functions will be disabled.\n"
 
 #include "server.h"
 #include "client.h"
+#include "utils.h"
 
 int processInput(int argc, char** argv, char **option, char **ip);
 
@@ -54,7 +55,7 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	if (!serverMode) printf("Trying to reach server at %s:%s \n", ip, "7013");
+	if (!serverMode) printf("Trying to reach server at %s:%d \n", ip, DEFAULT_PORT);
 
 	return EXIT_SUCCESS;
 }
@@ -65,6 +66,11 @@ int processInput(int argc, char** argv, char **option, char **ip) {
 
     if (argc > 1) {
         *ip = argv[1];
+
+        if (argv[1][0] == '-') {
+    		*option = argv[1];
+    	}
+
     }
     if (argc > 2) {
         *option = argv[2];
@@ -74,10 +80,6 @@ int processInput(int argc, char** argv, char **option, char **ip) {
 			*ip = argv[2];
 		}
     }
-
-    if (argv[1][0] == '-') {
-		*option = argv[1];
-	}
 
     if (argc < 2 || argc > 3) {
         return 1;

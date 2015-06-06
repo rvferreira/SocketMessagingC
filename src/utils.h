@@ -8,11 +8,18 @@
  ============================================================================
  */
 
+#ifndef UTILS_H_
+#define UTILS_H_
+
+#define DEFAULT_PORT 7013
+
 enum menu {
-	addContact = 1;
-	listContacts = 2;
-	deleteContact = 3;
-	sendMessageContact = 4;
-	sendMessageGroup = 5;
-	closeConnection = 6;
+	addContact = 1,
+	listContacts = 2,
+	deleteContact = 3,
+	sendMessageContact = 4,
+	sendMessageGroup = 5,
+	closeConnection = 6,
 };
+
+#endif
