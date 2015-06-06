@@ -40,7 +40,6 @@ All chat functions will be disabled.\n"
 
 #include "server.h"
 #include "client.h"
-#include "utils.h"
 
 int processInput(int argc, char** argv, char **option, char **ip);
 

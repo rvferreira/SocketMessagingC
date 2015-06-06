@@ -6,17 +6,20 @@
 C_SRCS += \
 ../src/SocketMessagingC.c \
 ../src/client.c \
-../src/server.c 
+../src/server.c \
+../src/utils.c 
 
 OBJS += \
 ./src/SocketMessagingC.o \
 ./src/client.o \
-./src/server.o 
+./src/server.o \
+./src/utils.o 
 
 C_DEPS += \
 ./src/SocketMessagingC.d \
 ./src/client.d \
-./src/server.d 
+./src/server.d \
+./src/utils.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
