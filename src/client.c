@@ -6,3 +6,9 @@
  */
 
 #include "client.h"
+
+void runClient(){
+	while(1){
+
+	}
+}

@@ -55,7 +55,10 @@ int main(int argc, char *argv[]) {
 		return EXIT_FAILURE;
 	}
 
-	if (!serverMode) printf("Trying to reach server at %s:%d \n", ip, DEFAULT_PORT);
+	if (!serverMode) {
+		printf("Trying to reach server at %s:%d \n", ip, DEFAULT_PORT);
+		runClient();
+	}
 
 	return EXIT_SUCCESS;
 }
