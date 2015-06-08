@@ -11,8 +11,10 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
-#define DEFAULT_PORT 7013
+#define IP_SIZE 15
+
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
+#define DEFAULT_PORT 7013
 
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -27,6 +29,9 @@
 extern int debugMode;
 extern int serverMode;		// Global variable that defines whether this is a Client or a Server
 
+extern int nOnlineUsers;
+extern int nContacts;
+
 enum menu {
 	addContact = 1,
 	listContacts = 2,
@@ -35,5 +40,15 @@ enum menu {
 	sendMessageGroup = 5,
 	closeConnection = 6,
 } menu;
+
+typedef struct ou {
+	char ip[15];
+	int contact;
+//	struct onlineUser *next;
+} onlineUser;
+
+extern onlineUser *onlineUsers;
+
+void variablesInit();
 
 #endif

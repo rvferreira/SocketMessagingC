@@ -11,28 +11,105 @@
 
 MENU *mainMenu;
 ITEM **mainMenuItems;
+int menuItemSelected = -1;
 
 char *choices[] = {
 	"Add Contact",
-	"listContacts",
-	"deleteContact",
-	"sendMessageContact",
-	"sendMessageGroup",
+	"List Contacts",
+	"Delete Contact",
+	"New Message",
+	"New Group Message",
 	"Exit",
 };
 
-void changeState(int menuItemSelected){
-	switch (menuItemSelected){
-		case 5: {
-			printf("Closing Connection...\n");
-			break;
+int serverRequest(int type, char *message){
+	return 0;
+}
+
+int deleteContactMethod(){
+	int i;
+	listContactsMethod();
+	printf("\nEnter the contact ID to be deleted or -1 for cancel: ");
+	scanf("%d", &i);
+
+	if (onlineUsers[i].contact){
+		onlineUsers[i].contact = 0;
+		printf("Contact successfully deleted.\n");
+	}
+	else if (i == -1){
+		return EXIT_SUCCESS;
+	}
+	else{
+		printf("Invalid ID.\n");
+		return EXIT_FAILURE;
+	}
+
+	return EXIT_SUCCESS;
+}
+
+int listContactsMethod(){
+	int i;
+	printf("Lista de Contatos: \n");
+	printf("\tID\tIP ADDRESS\n");
+	for (i=0; i<nOnlineUsers; i++){
+		if (onlineUsers[i].contact){
+			printf("\t%d\t%s\n", i, onlineUsers[i].ip);
 		}
+	}
+	return EXIT_SUCCESS;
+}
+
+int addContactMethod(){
+	char ip[IP_SIZE];
+	printf("Digite o ip do contato: ");
+	scanf("%s", ip);
+
+	onlineUser *try = NULL;
+
+	int i;
+	for (i = 0; i < nOnlineUsers; i++){
+		if (!strcmp(ip, onlineUsers[i].ip)){
+			try = &onlineUsers[i];
+		}
+	}
+
+	if (try == NULL){
+		printf("Invalid user's IP address.\n");
+		return EXIT_FAILURE;
+	}
+	else if (try->contact){
+		printf("Contact's already on the list of contacts.\n");
+		return EXIT_FAILURE;
+	}
+	else{
+		try->contact = 1;
+		nContacts++;
+		printf("Contact successfully added to contact list.\n");
+	}
+
+
+	return EXIT_SUCCESS;
+}
+
+void changeState(){
+	switch (menuItemSelected){
+	case addContact:
+		addContactMethod();
+		break;
+	case listContacts:
+		listContactsMethod();
+		break;
+	case deleteContact:
+		deleteContactMethod();
+		break;
+	case closeConnection:
+		printf("Closing Connection...\n");
+		break;
 	}
 }
 
 void startApp(){
 	int c, nChoices;
-	int menuItemSelected = -1;
 
 	initscr();
 	cbreak();
@@ -46,7 +123,7 @@ void startApp(){
 
 	int i;
 	for(i = 0; i < nChoices; ++i) {
-		sprintf(num[i], "%d", i);
+		sprintf(num[i], "%d", i+1);
 		mainMenuItems[i] = new_item(num[i], choices[i]);
 	}
 	mainMenuItems[nChoices] = (ITEM *)NULL;
@@ -74,14 +151,12 @@ void startApp(){
 		if (endLoop) break;
 	}
 
-	if (menuItemSelected == -1) menuItemSelected = 5;
+	if (menuItemSelected == -1) menuItemSelected = closeConnection;
 
 	free_item(mainMenuItems[0]);
 	free_item(mainMenuItems[1]);
 	free_menu(mainMenu);
 	endwin();
-
-	changeState(menuItemSelected);
 }
 
 int tryConnect(){
@@ -89,7 +164,14 @@ int tryConnect(){
 }
 
 void runClient() {
+	variablesInit();
 	if (!tryConnect()){
-		startApp();
+		while (menuItemSelected != closeConnection){
+			system("clear");
+			menuItemSelected = -1;
+			startApp();
+			changeState();
+			getch();
+		}
 	}
 }
