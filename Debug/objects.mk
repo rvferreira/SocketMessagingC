@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS :=
+LIBS := -lmenu -lncurses -lmenu -lncurses
 

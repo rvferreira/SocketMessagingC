@@ -12,6 +12,7 @@
 #define UTILS_H_
 
 #define DEFAULT_PORT 7013
+#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
 
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -33,6 +34,6 @@ enum menu {
 	sendMessageContact = 4,
 	sendMessageGroup = 5,
 	closeConnection = 6,
-};
+} menu;
 
 #endif

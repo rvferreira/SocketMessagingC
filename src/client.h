@@ -9,6 +9,8 @@
 #define CLIENT_H_
 
 #include "utils.h"
+#include <curses.h>
+#include <menu.h>
 
 void runClient();
 
