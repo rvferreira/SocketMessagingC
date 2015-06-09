@@ -8,7 +8,7 @@
 #ifndef CLIENT_H_
 #define CLIENT_H_
 
-#include "utils.h"
+#include "message.h"
 #include <curses.h>
 #include <menu.h>
 

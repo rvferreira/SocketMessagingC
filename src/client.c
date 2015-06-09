@@ -22,10 +22,6 @@ char *choices[] = {
 	"Exit",
 };
 
-int serverRequest(int type, char *message){
-	return 0;
-}
-
 int deleteContactMethod(){
 	int i;
 	listContactsMethod();
@@ -40,7 +36,7 @@ int deleteContactMethod(){
 		return EXIT_SUCCESS;
 	}
 	else{
-		printf("Invalid ID.\n");
+		printf("Not a contact.\n");
 		return EXIT_FAILURE;
 	}
 
@@ -49,7 +45,7 @@ int deleteContactMethod(){
 
 int listContactsMethod(){
 	int i;
-	printf("Lista de Contatos: \n");
+	printf("Contact List: \n");
 	printf("\tID\tIP ADDRESS\n");
 	for (i=0; i<nOnlineUsers; i++){
 		if (onlineUsers[i].contact){
@@ -61,10 +57,10 @@ int listContactsMethod(){
 
 int addContactMethod(){
 	char ip[IP_SIZE];
-	printf("Digite o ip do contato: ");
+	printf("Type the IP address of the contact: ");
 	scanf("%s", ip);
 
-	onlineUser *try = NULL;
+	OnlineUser *try = NULL;
 
 	int i;
 	for (i = 0; i < nOnlineUsers; i++){
@@ -101,6 +97,13 @@ void changeState(){
 		break;
 	case deleteContact:
 		deleteContactMethod();
+		break;
+	case sendMessageContact:
+		listContactsMethod();
+		sendMessageContactMethod();
+		break;
+	case sendMessageGroup:
+		sendMessageGroupMethod();
 		break;
 	case closeConnection:
 		printf("Closing Connection...\n");
@@ -171,7 +174,9 @@ void runClient() {
 			menuItemSelected = -1;
 			startApp();
 			changeState();
-			getch();
+			if ((menuItemSelected!=sendMessageContact)
+					&&((menuItemSelected!=sendMessageGroup)))
+				getch();
 		}
 	}
 }

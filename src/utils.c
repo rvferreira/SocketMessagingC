@@ -10,12 +10,12 @@
 int debugMode = 0;
 int serverMode = 0;
 
-onlineUser *onlineUsers;
+OnlineUser *onlineUsers;
 int nOnlineUsers = 3;
 int nContacts = 1;
 
 void variablesInit(){
-	onlineUsers = malloc(nOnlineUsers * sizeof(onlineUser));
+	onlineUsers = malloc(nOnlineUsers * sizeof(OnlineUser));
 	strcpy(onlineUsers[0].ip, "120.0.0.1");
 	onlineUsers[0].contact = 1;
 

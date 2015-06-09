@@ -39,15 +39,15 @@ enum menu {
 	sendMessageContact = 4,
 	sendMessageGroup = 5,
 	closeConnection = 6,
-} menu;
+};
 
 typedef struct ou {
 	char ip[15];
 	int contact;
 //	struct onlineUser *next;
-} onlineUser;
+} OnlineUser;
 
-extern onlineUser *onlineUsers;
+extern OnlineUser *onlineUsers;
 
 void variablesInit();
 
