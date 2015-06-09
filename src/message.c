@@ -25,7 +25,6 @@ int sendMessageContactMethod(){
 	int i;
 	printf("\nEnter the ID of the message target or -1 for cancel: ");
 	scanf("%d", &i);
-
 	if (!onlineUsers[i].contact){
 		printf("Not a contact.\n");
 		getch();
@@ -34,9 +33,12 @@ int sendMessageContactMethod(){
 	else if (i == -1){
 		return EXIT_SUCCESS;
 	}
+	else {
+		return EXIT_FAILURE;
+	}
 
 	char message[MESSAGE_SIZE];
-	printf("\nMessage: ");
+	printf("Message: ");
 	scanf("%s", message);
 
 	ServerMessage *new = malloc(sizeof(ServerMessage));
