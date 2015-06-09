@@ -9,7 +9,6 @@
 #define CLIENT_H_
 
 #include "message.h"
-#include <curses.h>
 #include <menu.h>
 
 void runClient();

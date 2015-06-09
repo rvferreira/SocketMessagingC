@@ -22,6 +22,18 @@ char *choices[] = {
 	"Exit",
 };
 
+int listContactsMethod(){
+	int i;
+	printf("Contact List: \n");
+	printf("\tID\tIP ADDRESS\n");
+	for (i=0; i<nOnlineUsers; i++){
+		if (onlineUsers[i].contact){
+			printf("\t%d\t%s\n", i, onlineUsers[i].ip);
+		}
+	}
+	return EXIT_SUCCESS;
+}
+
 int deleteContactMethod(){
 	int i;
 	listContactsMethod();
@@ -40,18 +52,6 @@ int deleteContactMethod(){
 		return EXIT_FAILURE;
 	}
 
-	return EXIT_SUCCESS;
-}
-
-int listContactsMethod(){
-	int i;
-	printf("Contact List: \n");
-	printf("\tID\tIP ADDRESS\n");
-	for (i=0; i<nOnlineUsers; i++){
-		if (onlineUsers[i].contact){
-			printf("\t%d\t%s\n", i, onlineUsers[i].ip);
-		}
-	}
 	return EXIT_SUCCESS;
 }
 

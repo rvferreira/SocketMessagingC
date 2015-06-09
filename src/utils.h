@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>
+#include "curses.h"
 
 extern int debugMode;
 extern int serverMode;		// Global variable that defines whether this is a Client or a Server

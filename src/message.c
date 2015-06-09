@@ -7,7 +7,17 @@
 
 #include "message.h"
 
-int serverRequest(MessageType type, char target, char *message){
+ServerMessage MessageBox[MESSAGE_BOX_SIZE];
+
+void insertMessageIntoMessageBox(ServerMessage *new){
+	MessageBox[4] = MessageBox[3];
+	MessageBox[3] = MessageBox[2];
+	MessageBox[2] = MessageBox[1];
+	MessageBox[1] = MessageBox[0];
+	MessageBox[0] = *new;
+}
+
+int serverRequest(ServerMessage m){
 	return 0;
 }
 
@@ -29,7 +39,12 @@ int sendMessageContactMethod(){
 	printf("\nMessage: ");
 	scanf("%s", message);
 
-	serverRequest(simpleTextSingleTarget, onlineUsers[i].contact, message);
+	ServerMessage *new = malloc(sizeof(ServerMessage));
+	new->messageType = simpleTextSingleTarget;
+	strcpy(new->target, onlineUsers[i].ip);
+	strcpy(new->message, message);
+
+	serverRequest(*new);
 
 	return EXIT_SUCCESS;
 
@@ -40,7 +55,12 @@ void sendMessageGroupMethod(){
 	printf("Message: ");
 	scanf("%s", message);
 
-	serverRequest(simpleTextBroadTarget, "all", message);
+	ServerMessage *new = malloc(sizeof(ServerMessage));
+	new->messageType = simpleTextBroadTarget;
+	strcpy(new->target, "all");
+	strcpy(new->message, message);
+
+	serverRequest(*new);
 }
 
 void updateMessagebox(){

@@ -11,6 +11,7 @@
 #include "utils.h"
 
 #define MESSAGE_SIZE 144
+#define MESSAGE_BOX_SIZE 5
 
 typedef enum mt {
 	simpleTextSingleTarget = 1,
@@ -23,7 +24,7 @@ typedef struct m {
 	MessageType messageType;
 	char target[15];
 	char message[MESSAGE_SIZE];
-} serverMessage;
+} ServerMessage;
 
 int sendMessageContactMethod();
 void sendMessageGroupMethod();
