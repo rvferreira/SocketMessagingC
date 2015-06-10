@@ -28,8 +28,8 @@ Emulation Options:\n\
 Fun fact: You killed the fun.\n"
 
 #define SERVER_MODE "\
-Starting " PROGRAM_NAME " in Server Mode. \n\
-All chat functions will be disabled.\n"
+Starting " PROGRAM_NAME " in Server Mode. \n"
+ /* All chat functions will be disabled.\n" */
 
 #define BAD_OPTION   "Bad option: "
 #define NO_VALID_IP "Invalid IPv4 address: "
@@ -54,7 +54,10 @@ int main(int argc, char *argv[]) {
 
 	if (!serverMode) {
 		printf("Trying to reach server at %s:%d \n", ip, DEFAULT_PORT);
-		runClient();
+		runClient(ip);
+	}
+	else {
+		runServer();
 	}
 
 	return EXIT_SUCCESS;

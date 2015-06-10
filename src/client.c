@@ -107,6 +107,7 @@ void changeState(){
 		break;
 	case closeConnection:
 		printf("Closing Connection...\n");
+		closeConnectionServer();
 		break;
 	}
 }
@@ -162,13 +163,15 @@ void startApp(){
 	endwin();
 }
 
-int tryConnect(){
-	return EXIT_SUCCESS;
+int tryConnect(char ip[]){
+	
+	return (establishedConnection(ip));
+
 }
 
-void runClient() {
+void runClient(char ip[]) {
 	variablesInit();
-	if (!tryConnect()){
+	if (!tryConnect(ip)){
 		while (menuItemSelected != closeConnection){
 			system("clear");
 			menuItemSelected = -1;

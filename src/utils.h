@@ -14,11 +14,12 @@
 #define IP_SIZE 15
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
-#define DEFAULT_PORT 7013
+#define DEFAULT_PORT 7000
 
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>   // Converte enderecos hosts
 #include <netdb.h>
 #include <stdio.h>
 #include <string.h>

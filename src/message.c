@@ -6,6 +6,7 @@
  */
 
 #include "message.h"
+#include "TCPClient.h"
 
 ServerMessage MessageBox[MESSAGE_BOX_SIZE];
 
@@ -18,6 +19,9 @@ void insertMessageIntoMessageBox(ServerMessage *new){
 }
 
 int serverRequest(ServerMessage m){
+	sendMessage(m);
+	getchar();
+
 	return 0;
 }
 
@@ -55,7 +59,7 @@ int sendMessageContactMethod(){
 void sendMessageGroupMethod(){
 	char message[MESSAGE_SIZE];
 	printf("Message: ");
-	scanf("%s", message);
+	fgets(message, sizeof(message),stdin);
 
 	ServerMessage *new = malloc(sizeof(ServerMessage));
 	new->messageType = simpleTextBroadTarget;

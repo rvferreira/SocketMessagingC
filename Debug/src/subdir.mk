@@ -6,13 +6,16 @@
 C_SRCS += \
 ../src/SocketMessagingC.c \
 ../src/client.c \
+../src/TCPClient.c \
 ../src/message.c \
 ../src/server.c \
 ../src/utils.c 
+ 
 
 OBJS += \
 ./src/SocketMessagingC.o \
 ./src/client.o \
+./src/TCPClient.o \
 ./src/message.o \
 ./src/server.o \
 ./src/utils.o 
@@ -20,6 +23,7 @@ OBJS += \
 C_DEPS += \
 ./src/SocketMessagingC.d \
 ./src/client.d \
+./src/TCPClient.d \
 ./src/message.d \
 ./src/server.d \
 ./src/utils.d 

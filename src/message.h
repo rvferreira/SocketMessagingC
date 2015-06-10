@@ -10,6 +10,7 @@
 
 #include "utils.h"
 
+
 #define MESSAGE_SIZE 144
 #define MESSAGE_BOX_SIZE 5
 
@@ -30,5 +31,7 @@ int sendMessageContactMethod();
 void sendMessageGroupMethod();
 
 void updateMessageBox();
+
+#include "TCPClient.h"
 
 #endif /* MESSAGE_H_ */
