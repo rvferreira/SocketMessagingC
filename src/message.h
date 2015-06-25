@@ -10,9 +10,8 @@
 
 #include "utils.h"
 
-
 #define MESSAGE_SIZE 144
-#define MESSAGE_BOX_SIZE 5
+#define MESSAGE_BOX_SIZE 10
 
 typedef enum mt {
 	simpleTextSingleTarget = 1,
@@ -23,14 +22,20 @@ typedef enum mt {
 
 typedef struct m {
 	MessageType messageType;
+	char origin[15];
 	char target[15];
 	char message[MESSAGE_SIZE];
 } ServerMessage;
 
+extern ServerMessage MessageBox[];
+extern ServerMessage *newMessage;
+extern sem_t newMessage_sem;
+
+ServerMessage* setMessage(MessageType, char[], char[]);
+void copyMessage(ServerMessage *destiny, ServerMessage *origin);
+
 int sendMessageContactMethod();
 void sendMessageGroupMethod();
-
-void updateMessageBox();
 
 #include "TCPClient.h"
 

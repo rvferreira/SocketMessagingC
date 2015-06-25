@@ -27,12 +27,16 @@
 #include <unistd.h>
 #include <errno.h>
 #include "curses.h"
+#include <pthread.h>
+#include <semaphore.h>
 
 extern int debugMode;
 extern int serverMode;		// Global variable that defines whether this is a Client or a Server
 
 extern int nOnlineUsers;
 extern int nContacts;
+
+extern char myIP[];
 
 enum menu {
 	addContact = 1,

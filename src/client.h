@@ -12,6 +12,6 @@
 #include "TCPClient.h"
 #include <menu.h>
 
-void runClient(char *);
+void runClient(char[]);
 
 #endif /* CLIENT_H_ */

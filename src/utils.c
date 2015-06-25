@@ -9,6 +9,7 @@
 
 int debugMode = 0;
 int serverMode = 0;
+char myIP[15] = "127.0.0.1";
 
 OnlineUser *onlineUsers;
 int nOnlineUsers = 3;

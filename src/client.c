@@ -13,6 +13,8 @@ MENU *mainMenu;
 ITEM **mainMenuItems;
 int menuItemSelected = -1;
 
+pthread_t messageBoxCheck;
+
 char *choices[] = {
 	"Add Contact",
 	"List Contacts",
@@ -21,6 +23,28 @@ char *choices[] = {
 	"New Group Message",
 	"Exit",
 };
+
+void receiveMessage(){
+	newMessage = setMessage(simpleTextSingleTarget, "myself", "Hello World!");
+	sem_post(&newMessage_sem);
+}
+
+void *insertMessageIntoMessageBox(void *thread_id){
+	while (1) {
+		sem_wait(&newMessage_sem);
+		int i;
+		for (i = MESSAGE_BOX_SIZE - 1; i > 0; i--) {
+//			copyMessage(&(MessageBox[i]), &(MessageBox[i - 1]));
+		}
+		copyMessage(&(MessageBox[0]), newMessage);
+		free(newMessage);
+
+//		for (i = MESSAGE_BOX_SIZE - 1; i >= 0; i--) {
+//			mvprintw(LINES - 4 - MESSAGE_BOX_SIZE + i, 0, "TESTE %s : %s \n", MessageBox[i].origin,
+//					 MessageBox[i].message);
+//		}
+	}
+}
 
 int listContactsMethod(){
 	int i;
@@ -31,6 +55,8 @@ int listContactsMethod(){
 			printf("\t%d\t%s\n", i, onlineUsers[i].ip);
 		}
 	}
+	receiveMessage(); //FOR TESTING
+
 	return EXIT_SUCCESS;
 }
 
@@ -112,6 +138,19 @@ void changeState(){
 	}
 }
 
+void initMessaging(){
+	int i;
+	ServerMessage *null = setMessage(simpleTextSingleTarget, "-", "\0");
+	for (i=0; i<MESSAGE_BOX_SIZE; i++){
+		copyMessage(&(MessageBox[i]), null);
+	}
+
+	if (pthread_create(&messageBoxCheck, 0, insertMessageIntoMessageBox, NULL) != 0) {
+		printf("Messages loader init failure!");
+		exit(0);
+	}
+}
+
 void startApp(){
 	int c, nChoices;
 
@@ -135,7 +174,9 @@ void startApp(){
 	mainMenu = new_menu((ITEM **)mainMenuItems);
 	mvprintw(LINES - 2, 0, "F3 to Exit");
 	post_menu(mainMenu);
-	refresh();
+//	refresh();
+
+	initMessaging();
 
 	while((c = getch()) != KEY_F(3))
 	{
@@ -145,6 +186,9 @@ void startApp(){
 				menu_driver(mainMenu, REQ_DOWN_ITEM);
 				break;
 			case KEY_UP:
+				for (i = MESSAGE_BOX_SIZE - 1; i >= 0; i--) {
+					mvprintw(LINES - 4 - MESSAGE_BOX_SIZE + i, 0, "TESTE %s : %s \n", MessageBox[i].origin, MessageBox[i].message);
+				}
 				menu_driver(mainMenu, REQ_UP_ITEM);
 				break;
 			case 10: /* Enter */
@@ -172,6 +216,7 @@ int tryConnect(char ip[]){
 void runClient(char ip[]) {
 	variablesInit();
 	if (!tryConnect(ip)){
+		sem_init(&newMessage_sem, 0, 0);
 		while (menuItemSelected != closeConnection){
 			system("clear");
 			menuItemSelected = -1;
@@ -181,5 +226,6 @@ void runClient(char ip[]) {
 					&&((menuItemSelected!=sendMessageGroup)))
 				getch();
 		}
+		pthread_cancel(messageBoxCheck);
 	}
 }
