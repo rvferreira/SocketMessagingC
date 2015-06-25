@@ -34,15 +34,15 @@ void *insertMessageIntoMessageBox(void *thread_id){
 		sem_wait(&newMessage_sem);
 		int i;
 		for (i = MESSAGE_BOX_SIZE - 1; i > 0; i--) {
-//			copyMessage(&(MessageBox[i]), &(MessageBox[i - 1]));
+			copyMessage(&(MessageBox[i]), &(MessageBox[i - 1]));
 		}
 		copyMessage(&(MessageBox[0]), newMessage);
 		free(newMessage);
 
-//		for (i = MESSAGE_BOX_SIZE - 1; i >= 0; i--) {
-//			mvprintw(LINES - 4 - MESSAGE_BOX_SIZE + i, 0, "TESTE %s : %s \n", MessageBox[i].origin,
-//					 MessageBox[i].message);
-//		}
+		for (i = MESSAGE_BOX_SIZE - 1; i >= 0; i--) {
+			mvprintw(LINES - 4 - MESSAGE_BOX_SIZE + i, 0, "TESTE %s : %s \n", MessageBox[i].origin,
+					 MessageBox[i].message);
+		}
 	}
 }
 
@@ -144,11 +144,6 @@ void initMessaging(){
 	for (i=0; i<MESSAGE_BOX_SIZE; i++){
 		copyMessage(&(MessageBox[i]), null);
 	}
-
-	if (pthread_create(&messageBoxCheck, 0, insertMessageIntoMessageBox, NULL) != 0) {
-		printf("Messages loader init failure!");
-		exit(0);
-	}
 }
 
 void startApp(){
@@ -174,9 +169,11 @@ void startApp(){
 	mainMenu = new_menu((ITEM **)mainMenuItems);
 	mvprintw(LINES - 2, 0, "F3 to Exit");
 	post_menu(mainMenu);
-//	refresh();
 
-	initMessaging();
+	if (pthread_create(&messageBoxCheck, 0, insertMessageIntoMessageBox, NULL) != 0) {
+		printf("Messages loader init failure!");
+		exit(0);
+	}
 
 	while((c = getch()) != KEY_F(3))
 	{
@@ -186,9 +183,6 @@ void startApp(){
 				menu_driver(mainMenu, REQ_DOWN_ITEM);
 				break;
 			case KEY_UP:
-				for (i = MESSAGE_BOX_SIZE - 1; i >= 0; i--) {
-					mvprintw(LINES - 4 - MESSAGE_BOX_SIZE + i, 0, "TESTE %s : %s \n", MessageBox[i].origin, MessageBox[i].message);
-				}
 				menu_driver(mainMenu, REQ_UP_ITEM);
 				break;
 			case 10: /* Enter */
@@ -214,6 +208,7 @@ int tryConnect(char ip[]){
 }
 
 void runClient(char ip[]) {
+	initMessaging();
 	variablesInit();
 	if (!tryConnect(ip)){
 		sem_init(&newMessage_sem, 0, 0);
