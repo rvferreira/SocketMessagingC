@@ -24,11 +24,13 @@ char *choices[] = {
 	"Exit",
 };
 
-void receiveMessage(){
+/*	Function for text message receiving  */
+void receiveMessage(){	//TODO Different cases for received messages
 	newMessage = setMessage(simpleTextSingleTarget, "myself", "Hello World!");
 	sem_post(&newMessage_sem);
 }
 
+/* thread that evaluates list of local users after a message is received and its semaphore is setted  */
 void *insertMessageIntoMessageBox(void *thread_id){
 	while (1) {
 		sem_wait(&newMessage_sem);
@@ -43,9 +45,11 @@ void *insertMessageIntoMessageBox(void *thread_id){
 			mvprintw(LINES - 4 - MESSAGE_BOX_SIZE + i, 0, "TESTE %s : %s \n", MessageBox[i].origin,
 					 MessageBox[i].message);
 		}
+		refresh();
 	}
 }
 
+/*  prints the list of all locally added contacts  */
 int listContactsMethod(){
 	int i;
 	printf("Contact List: \n");
@@ -55,11 +59,11 @@ int listContactsMethod(){
 			printf("\t%d\t%s\n", i, onlineUsers[i].ip);
 		}
 	}
-	receiveMessage(); //FOR TESTING
 
 	return EXIT_SUCCESS;
 }
 
+/*  remove contact from local list  */
 int deleteContactMethod(){
 	int i;
 	listContactsMethod();
@@ -81,6 +85,8 @@ int deleteContactMethod(){
 	return EXIT_SUCCESS;
 }
 
+
+/*  add contact from online users to local contacts list  */
 int addContactMethod(){
 	char ip[IP_SIZE];
 	printf("Type the IP address of the contact: ");
@@ -113,6 +119,7 @@ int addContactMethod(){
 	return EXIT_SUCCESS;
 }
 
+/*  menu interface pseudo-factory  */
 void changeState(){
 	switch (menuItemSelected){
 	case addContact:
@@ -138,6 +145,7 @@ void changeState(){
 	}
 }
 
+/*    */
 void initMessaging(){
 	int i;
 	ServerMessage *null = setMessage(simpleTextSingleTarget, "-", "\0");
@@ -185,6 +193,9 @@ void startApp(){
 			case KEY_UP:
 				menu_driver(mainMenu, REQ_UP_ITEM);
 				break;
+			case KEY_LEFT: //FOR TESTING
+				receiveMessage();
+				break;
 			case 10: /* Enter */
 				menuItemSelected = atoi(item_name(current_item(mainMenu)));
 				endLoop = 1;
@@ -202,9 +213,7 @@ void startApp(){
 }
 
 int tryConnect(char ip[]){
-	
 	return (establishedConnection(ip));
-
 }
 
 void runClient(char ip[]) {
