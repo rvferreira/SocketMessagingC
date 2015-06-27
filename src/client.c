@@ -1,9 +1,13 @@
 /*
- * client.c
- *
- *  Created on: Jun 6, 2015
- *      Author: rferreira
+ ============================================================================
+ Name        : client.c
+ Author      : Raphael Ferreira e Jéssika Darambaris
+ Version     : 1.0
+ Copyright   : Use a vontz, mas conserve os créditos
+ Description : Server-Client message passing in C, Ansi-style
+ ============================================================================
  */
+
 
 #include "client.h"
 
@@ -218,7 +222,7 @@ int tryConnect(char ip[]){
 
 void runClient(char ip[]) {
 	initMessaging();
-	variablesInit();
+	//variablesInit();
 	if (!tryConnect(ip)){
 		sem_init(&newMessage_sem, 0, 0);
 		while (menuItemSelected != closeConnection){

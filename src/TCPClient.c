@@ -1,14 +1,25 @@
+/*
+ ============================================================================
+ Name        : TCPClient.c
+ Author      : Raphael Ferreira e Jéssika Darambaris
+ Version     : 1.0
+ Copyright   : Use a vontz, mas conserve os créditos
+ Description : Server-Client message passing in C, Ansi-style
+ ============================================================================
+ */
+
 #include "TCPClient.h"
 #include "message.h"
 
 int sockClient;
+
 /* estabelece uma conexão com um servidor online */
 int establishedConnection(char ip[])
 {
    struct hostent *host;
    struct sockaddr_in server_addr;
-     int bytes_recv;
-   char reply[1024];
+   int bytes_recv;
+   ServerMessage recv_data;
 
    host = gethostbyname(ip);
    
@@ -31,10 +42,10 @@ int establishedConnection(char ip[])
       exit(1);
    }
 
-   bytes_recv =  recv(sockClient,reply,1024,0);
-   reply[bytes_recv] = '\0';
+   bytes_recv =  recv(sockClient,(void *)&recv_data,sizeof(recv_data),0);
+   //reply[bytes_recv] = '\0';
 
-   printf("\n %s \n",reply);
+   printf("\n %s \n",recv_data.message);
 
    getchar();
 
@@ -43,23 +54,23 @@ int establishedConnection(char ip[])
 }
 
 void closeConnectionServer(){
-
+   ServerMessage m;
+   strcpy(m.message,"close");
+   
    /* avisa o servidor que fechou a conexão */ 
-   send(sockClient,"close",strlen("close"), 0);
+   send(sockClient,(void *)&m,sizeof(m), 0);
    close(sockClient);
 }
 
 void sendMessage(ServerMessage m){
-   int bytes_recv;
-   char reply[1024];
+   ServerMessage reply;
+   
    /* envia mensagem para o servidor */
-   if (send(sockClient,m.message,strlen(m.message), 0) == -1) {
+   if (send(sockClient,(void *)&m,sizeof(m), 0) == -1) {
       printf("Error: Message \n");
    }
 
    /*servidor confirma o recebimento da mensagem */
-   bytes_recv =  recv(sockClient,reply,1024,0);
-   reply[bytes_recv] = '\0';
-   printf("\n %s \n",reply);
-
+  recv(sockClient,(void *)&reply,sizeof(reply),0);
+  printf("\n %s \n",reply.message);
 }

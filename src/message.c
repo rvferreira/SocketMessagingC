@@ -1,9 +1,13 @@
 /*
- * message.c
- *
- *  Created on: Jun 9, 2015
- *      Author: rferreira
+ ============================================================================
+ Name        : message.c
+ Author      : Raphael Ferreira e Jéssika Darambaris
+ Version     : 1.0
+ Copyright   : Use a vontz, mas conserve os créditos
+ Description : Server-Client message passing in C, Ansi-style
+ ============================================================================
  */
+
 
 #include "message.h"
 #include "TCPClient.h"

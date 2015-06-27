@@ -7,9 +7,9 @@
  Description : Server-Client message passing in C, Ansi-style
  ============================================================================
  */
-
 #define PROGRAM_NAME "SocketMessagingC"
 
+/* descrição do menu do programa */
 #define USAGE "\
 Usage: " PROGRAM_NAME " [options] IP\n\
 Try \"" PROGRAM_NAME " --help\" for more informations.\n"
@@ -43,6 +43,7 @@ Starting " PROGRAM_NAME " in Server Mode. \n"
 
 int processInput(int argc, char** argv, char **option, char **ip);
 
+
 int main(int argc, char *argv[]) {
 	char *option = NULL;
 	char *ip = NULL;
@@ -63,6 +64,7 @@ int main(int argc, char *argv[]) {
 	return EXIT_SUCCESS;
 }
 
+/* trata a entrada pelos parâmetros passados na execução da entrada */
 int processInput(int argc, char** argv, char **option, char **ip) {
 	*ip = malloc(15*sizeof(char));
 	*option = malloc(15*sizeof(char));
@@ -88,6 +90,7 @@ int processInput(int argc, char** argv, char **option, char **ip) {
         return 1;
     }
 
+    /* opção de debug */
     if (!strcmp(*option, "--debug")) {
     	if (argc < 3) {
     		printf("%s\n", HELP);
@@ -97,11 +100,13 @@ int processInput(int argc, char** argv, char **option, char **ip) {
 		debugMode = 1;
 	}
 
+	/* opção help que mostra como usar o programa */
     if (!strcmp(*option, "--help")) {
         printf("%s\n", HELP);
         exit(1);
     }
 
+    /* inicializar no modo server */
     if (!(strcmp(*option, "--server")&&strcmp(*ip, "--server"))) {
     	if (!strcmp(*ip, "--debug")) {
 			printf("%s\n", "Verbose on.\n");

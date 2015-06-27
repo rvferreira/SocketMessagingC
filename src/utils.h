@@ -14,7 +14,8 @@
 #define IP_SIZE 15
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
-#define DEFAULT_PORT 7000
+#define DEFAULT_PORT 7000	// a porta do servidor
+#define BACKLOG 10// quantidade de conexões aceitas
 
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -55,6 +56,7 @@ typedef struct ou {
 
 extern OnlineUser *onlineUsers;
 
-void variablesInit();
+//void variablesInit();
+void addOnlineUser(char *);
 
 #endif
