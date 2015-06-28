@@ -16,8 +16,8 @@
   disciplina "moodle.lasdpc.icmc.usp.br"
 */
 
-  // número de contatos online
-  int numberOn = 0;
+char ipClient[15], ipServer[15];
+int portClient;
 
 void runServer(){
   
@@ -62,8 +62,9 @@ void runServer(){
        exit(1);
    }
   
- // addOnlineUser("127.0.0.1"); 
-  
+  strcpy(ipServer,inet_ntoa(server_addr.sin_addr));
+  addOnlineUser(ipServer, DEFAULT_PORT);
+
   /* servidor fica ouvindo as requisições dos clientes */
   printf("\nServer TCP waiting for connections in port 7000... \n");
   fflush(stdout);
@@ -77,12 +78,26 @@ void runServer(){
    // addOnlineUser(inet_ntoa(client_addr.sin_addr));
     printf("\nConnection accepted of (%s , %d)\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
       
+      strcpy(ipClient,inet_ntoa(client_addr.sin_addr));
+      portClient = ntohs(client_addr.sin_port);
+
+      addOnlineUser(ipClient,portClient);
+     
+      listOnlineUsers();
       // criação de threads para a troca de mensagem com o servidor 
       pthread_t thread_id;
+      pthread_t thread_broadcast_online_users;
+
       new_sock = malloc (1);
       *new_sock = connected;
 
       if(pthread_create( &thread_id , NULL , connection_handler , (void*) new_sock) < 0)
+      {
+        perror("could not create thread");
+        exit(1);
+      } 
+
+      if(pthread_create( &thread_broadcast_online_users, NULL , broadcast_list_online , (void*) new_sock) < 0)
       {
         perror("could not create thread");
         exit(1);
@@ -104,13 +119,20 @@ void runServer(){
 void *connection_handler(void *sock){
     // captura o descritor de socket 
     int connected = *(int*) sock;
-    ServerMessage recv_data, send_data, response_server;
-    int target = numberOn - 1;
+    ServerMessage recv_data, response_server;
     int bytes_recv;
+    
 
-    strcpy(response_server.origin,"127.0.0.1");
-   // strcpy(response_server.target,onlineUsers[target].ip);
-    response_server.messageType = 5;
+    /* o server sempre é o primeiro [0] a responder */
+    strcpy(response_server.origin,ipServer);
+
+    /* como o usuário acabou de ser adicionado pegamos seu ip */
+    strcpy(response_server.target,ipClient);
+    
+    /* pegando sua porta */
+    response_server.port = portClient;
+
+    response_server.messageType = responseServer;
     strcpy(response_server.message,"Your Successful Connection!");  
     
     // Loop para manter a troca de mensagens
@@ -123,10 +145,35 @@ void *connection_handler(void *sock){
 
         // Funcao recv (int socket, void *buffer, size_t size, int flags)        
         bytes_recv = recv(connected, (void *)&recv_data, sizeof(recv_data), 0);
+            if(!strcmp(recv_data.message,"broadcast_list_online")){
            
-            if (strcmp(recv_data.message,"close") == 0 && bytes_recv)
+              send(connected, &nOnlineUsers, sizeof(int), 0);
+         
+              sleep(1);
+              
+              recv(connected, recv_data.message, sizeof(recv_data.message), 0);
+             
+              if (!strcmp(recv_data.message,"OK")){
+              
+                send(connected, onlineUsers, sizeof(onlineUsers), 0);
+                recv(connected, recv_data.message, sizeof(recv_data.message), 0);
+                    
+              }
+            }
+            else if (strcmp(recv_data.message,"close") == 0 && bytes_recv)
             {
                close(connected);
+
+               int j;
+
+               for (j=0; j<=nOnlineUsers; j++){
+                   if (!strcmp(recv_data.origin, onlineUsers[j].ip)){
+                       onlineUsers[j].valid = 0;
+                    }
+               } 
+
+               listOnlineUsers();
+
                printf("\nLost connection... \n");
                fflush(stdout);
                break;
@@ -140,4 +187,19 @@ void *connection_handler(void *sock){
       }
       free(sock);
       pthread_exit(0);
+}
+
+void *broadcast_list_online(void *sock){
+  /* manda de tempos em tempos a lista online para os clientes */
+  // captura o descritor de socket 
+  int connected = *(int*) sock;
+  ServerMessage m;
+  /* diz para o cliente que está mandando a lista de contatos */
+  strcpy(m.message,"broadcast_list_online");
+
+  /* manda o aviso */
+  send(connected, (void *)&m, sizeof(m),0);
+  sleep(500);
+ 
+ pthread_exit(0);
 }

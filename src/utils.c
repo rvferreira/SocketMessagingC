@@ -13,7 +13,8 @@
 
 int debugMode = 0;
 int serverMode = 0;
-char myIP[15] = "127.0.0.1";
+char myIP[15];
+int myPort;
 
 OnlineUser *onlineUsers;
 int nOnlineUsers = -1;
@@ -33,15 +34,32 @@ void variablesInit(){
 }
 */
 
-void addOnlineUser(char *ip){
+void addOnlineUser(char *ip, int port){
 	nOnlineUsers++;
 
-	if (nOnlineUsers = 0) 
-		onlineUsers = (OnlineUser *)malloc(1*sizeof(OnlineUser));
+	if (!nOnlineUsers) 
+		onlineUsers = (OnlineUser *)malloc(sizeof(OnlineUser));
 	else 
-		onlineUsers = (OnlineUser *)realloc(onlineUsers, nOnlineUsers * sizeof(OnlineUser));
+		onlineUsers = (OnlineUser *)realloc(onlineUsers, (nOnlineUsers+1) * sizeof(OnlineUser));
 	
 	strcpy(onlineUsers[nOnlineUsers].ip, ip);
 	
+	onlineUsers[nOnlineUsers].port = port;
 	onlineUsers[nOnlineUsers].contact = 0;
+	
+	/* todo usuário começa como válido, se ele cair ele fica 0 */
+	onlineUsers[nOnlineUsers].valid = 1;
+
+	printf("\n Add User ip: %s \n",onlineUsers[nOnlineUsers].ip);
+}
+
+
+/*apenas para debugar o código */
+void listOnlineUsers(){
+	int i;
+
+	for (i=0;i<=nOnlineUsers;i++){
+		if(onlineUsers[i].valid) printf("\nUser online Port: %d \n", onlineUsers[i].port);
+	}
+
 }

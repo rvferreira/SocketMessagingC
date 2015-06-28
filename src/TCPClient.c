@@ -18,7 +18,6 @@ int establishedConnection(char ip[])
 {
    struct hostent *host;
    struct sockaddr_in server_addr;
-   int bytes_recv;
    ServerMessage recv_data;
 
    host = gethostbyname(ip);
@@ -42,13 +41,17 @@ int establishedConnection(char ip[])
       exit(1);
    }
 
-   bytes_recv =  recv(sockClient,(void *)&recv_data,sizeof(recv_data),0);
-   //reply[bytes_recv] = '\0';
-
-   printf("\n %s \n",recv_data.message);
-
+   recv(sockClient,(void *)&recv_data,sizeof(recv_data),0);
+   
+   // copia para myIP o valor que o server deu para a máquina cliente  
+   strcpy(myIP,recv_data.target);
+   myPort = recv_data.port;
+  
+   // mensagem emitida do servidor
+   printf("\n %s \n", recv_data.message);
    getchar();
-
+    onlineUsers = malloc (sizeof(OnlineUser));
+   receiveMessage();   
   return 0;
 
 }
@@ -56,7 +59,7 @@ int establishedConnection(char ip[])
 void closeConnectionServer(){
    ServerMessage m;
    strcpy(m.message,"close");
-   
+   strcpy(m.origin, myIP);
    /* avisa o servidor que fechou a conexão */ 
    send(sockClient,(void *)&m,sizeof(m), 0);
    close(sockClient);
@@ -73,4 +76,29 @@ void sendMessage(ServerMessage m){
    /*servidor confirma o recebimento da mensagem */
   recv(sockClient,(void *)&reply,sizeof(reply),0);
   printf("\n %s \n",reply.message);
+}
+
+void receiveMessage(){
+   ServerMessage reply;
+   
+   /* fica esperando uma mensagem do servidor */
+   recv(sockClient,(void *)&reply,sizeof(reply),0);
+   
+   /* servidor enviando a lista de contatos */
+   if (!strcmp(reply.message,"broadcast_list_online")){
+        send(sockClient,(void *)&reply,sizeof(reply),0);
+
+        sleep(1);
+        recv(sockClient,&nOnlineUsers,sizeof(int),0);
+        send(sockClient,"OK",sizeof("OK"),0);
+        sleep(1);
+        
+        onlineUsers = realloc (NULL,sizeof(OnlineUser)*(nOnlineUsers+1));
+        
+        recv(sockClient, onlineUsers,sizeof(onlineUsers),0);
+        send(sockClient,"OK",sizeof("OK"),0);
+        
+   }
+
+   return;
 }

@@ -35,8 +35,10 @@ typedef struct m {
 	MessageType messageType;
 	char origin[15];
 	char target[15];
+	int port;
 	char message[MESSAGE_SIZE];
 } ServerMessage;
+
 
 extern ServerMessage MessageBox[];
 extern ServerMessage *newMessage;

@@ -23,6 +23,7 @@ ServerMessage* setMessage(MessageType t, char target[], char message[]){
 	strcpy(new->origin, myIP);
 	strcpy(new->target, target);
 	strcpy(new->message, message);
+	new->port = myPort;
 
 	return new;
 }
@@ -65,6 +66,7 @@ int sendMessageContactMethod(){
 	new->messageType = simpleTextSingleTarget;
 	strcpy(new->origin, myIP);
 	strcpy(new->target, onlineUsers[i].ip);
+	new->port = onlineUsers[i].port;
 	strcpy(new->message, message);
 
 	serverRequest(*new);
@@ -80,7 +82,8 @@ void sendMessageGroupMethod(){
 	ServerMessage *new = malloc(sizeof(ServerMessage));
 	new->messageType = simpleTextBroadTarget;
 	strcpy(new->target, "all");
+	strcpy(new->origin, myIP);		
 	strcpy(new->message, message);
-
+	new->port = myPort;
 	serverRequest(*new);
 }

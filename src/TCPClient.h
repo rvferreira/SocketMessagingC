@@ -17,5 +17,6 @@
 int establishedConnection(char *);
 void closeConnectionServer();
 void sendMessage(ServerMessage);
+void receiveMessage(void);
 
 #endif /* TCPCLIENT_H_ */

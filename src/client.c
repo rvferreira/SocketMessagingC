@@ -29,8 +29,9 @@ char *choices[] = {
 };
 
 /*	Function for text message receiving  */
-void receiveMessage(){	//TODO Different cases for received messages
+void threadReceiveMessage(){	//TODO Different cases for received messages
 	newMessage = setMessage(simpleTextSingleTarget, "myself", "Hello World!");
+	receiveMessage();
 	sem_post(&newMessage_sem);
 }
 
@@ -98,8 +99,10 @@ int addContactMethod(){
 
 	OnlineUser *try = NULL;
 
+	printf("NONLINEUSERS: %d",nOnlineUsers);
 	int i;
 	for (i = 0; i < nOnlineUsers; i++){
+		printf("\n IP[%d]: %s \n",i,onlineUsers[i].ip);
 		if (!strcmp(ip, onlineUsers[i].ip)){
 			try = &onlineUsers[i];
 		}
@@ -198,7 +201,7 @@ void startApp(){
 				menu_driver(mainMenu, REQ_UP_ITEM);
 				break;
 			case KEY_LEFT: //FOR TESTING
-				receiveMessage();
+				threadReceiveMessage();
 				break;
 			case 10: /* Enter */
 				menuItemSelected = atoi(item_name(current_item(mainMenu)));

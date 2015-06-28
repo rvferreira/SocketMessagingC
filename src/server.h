@@ -15,6 +15,11 @@
 #include <pthread.h> 
 #include "utils.h"
 
+extern  char ipClient[15];
+extern  char ipServer[15];
+extern int portClient;
+
 void runServer();
 void *connection_handler(void *); 
+void *broadcast_list_online(void *);  //broadcast para todos os usuários
 #endif /* SERVER_H_ */

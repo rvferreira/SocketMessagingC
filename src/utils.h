@@ -36,8 +36,8 @@ extern int serverMode;		// Global variable that defines whether this is a Client
 
 extern int nOnlineUsers;
 extern int nContacts;
-
-extern char myIP[];
+extern char myIP[15];
+extern int myPort;
 
 enum menu {
 	addContact = 1,
@@ -51,12 +51,14 @@ enum menu {
 typedef struct ou {
 	char ip[15];
 	int contact;
+	int port;
+	int valid;
 //	struct onlineUser *next;
 } OnlineUser;
 
 extern OnlineUser *onlineUsers;
 
 //void variablesInit();
-void addOnlineUser(char *);
-
+void addOnlineUser(char *,int);
+void listOnlineUsers(void);
 #endif
