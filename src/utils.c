@@ -35,7 +35,6 @@ void variablesInit(){
 */
 
 void addOnlineUser(char *ip, int port){
-	nOnlineUsers++;
 
 	if (!nOnlineUsers) 
 		onlineUsers = (OnlineUser *)malloc(sizeof(OnlineUser));
@@ -51,6 +50,7 @@ void addOnlineUser(char *ip, int port){
 	onlineUsers[nOnlineUsers].valid = 1;
 
 	printf("\n Add User ip: %s \n",onlineUsers[nOnlineUsers].ip);
+	nOnlineUsers++;
 }
 
 

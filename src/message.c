@@ -54,9 +54,6 @@ int sendMessageContactMethod(){
 		getch();
 		return EXIT_FAILURE;
 	}
-	else {
-		return EXIT_FAILURE;
-	}
 
 	char message[MESSAGE_SIZE];
 	printf("Message: ");
