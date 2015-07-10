@@ -153,6 +153,7 @@ void *connection_handler(void *sock){
             break;
         }
         else {
+            printf("%K: %s", recv_data.message);
             threadReceiveMessage(recv_data.message);
         }
 

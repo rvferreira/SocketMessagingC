@@ -59,7 +59,7 @@ int sendMessageContactMethod(){
 	printf("Message: ");
 	scanf("%s", message);
 
-	if (send(onlineUsers[i].sock, (void *) message, MESSAGE_SIZE, 0) == -1) {
+	if (send(onlineUsers[i].sock, message, MESSAGE_SIZE, 0) == -1) {
 		printf("Error: Message \n");
 	}
 
