@@ -28,6 +28,10 @@ char *choices[] = {
 	"Exit",
 };
 
+int tryConnect(char ip[]){
+	return (establishedConnection(ip));
+}
+
 /*	Function for text message receiving  */
 void threadReceiveMessage(){	//TODO Different cases for received messages
 	newMessage = setMessage(simpleTextSingleTarget, "myself", "Hello World!");
@@ -61,6 +65,7 @@ int listContactsMethod(){
 	printf("\tID\tIP ADDRESS\n");
 	for (i=0; i<nOnlineUsers; i++){
 		if (onlineUsers[i].contact){
+			printf("testing");
 			printf("\t%d\t%s\n", i, onlineUsers[i].ip);
 		}
 	}
@@ -99,29 +104,24 @@ int addContactMethod(){
 
 	OnlineUser *try = NULL;
 
-	printf("NONLINEUSERS: %d",nOnlineUsers);
 	int i;
-	for (i = 0; i < nOnlineUsers; i++){
-		printf("\n IP[%d]: %s \n",i,onlineUsers[i].ip);
-		if (!strcmp(ip, onlineUsers[i].ip)){
-			try = &onlineUsers[i];
-		}
+	for (i=0; i<nOnlineUsers; i++){
+		if (!strcmp(ip, onlineUsers[i].ip)) try=&onlineUsers[i];
 	}
 
-	if (try == NULL){
-		printf("Invalid user's IP address.\n");
-		return EXIT_FAILURE;
-	}
-	else if (try->contact){
+	if (try!=NULL){
 		printf("Contact's already on the list of contacts.\n");
 		return EXIT_FAILURE;
 	}
-	else{
-		try->contact = 1;
-		nContacts++;
+	else if (!tryConnect(ip)){
+		addOnlineUser(ip, DEFAULT_PORT);
 		printf("Contact successfully added to contact list.\n");
-	}
 
+	}
+	else{
+		printf("Invalid user's IP address\n");
+		return EXIT_FAILURE;
+	}
 
 	return EXIT_SUCCESS;
 }
@@ -219,24 +219,18 @@ void startApp(){
 	endwin();
 }
 
-int tryConnect(char ip[]){
-	return (establishedConnection(ip));
-}
-
-void runClient(char ip[]) {
+void runClient() {
 	initMessaging();
-	//variablesInit();
-	if (!tryConnect(ip)){
-		sem_init(&newMessage_sem, 0, 0);
-		while (menuItemSelected != closeConnection){
-			system("clear");
-			menuItemSelected = -1;
-			startApp();
-			changeState();
-			if ((menuItemSelected!=sendMessageContact)
-					&&((menuItemSelected!=sendMessageGroup)))
-				getch();
-		}
-		pthread_cancel(messageBoxCheck);
+	sem_init(&newMessage_sem, 0, 0);
+
+	while (menuItemSelected != closeConnection){
+		system("clear");
+		menuItemSelected = -1;
+		startApp();
+		changeState();
+		if ((menuItemSelected!=sendMessageContact)
+				&&((menuItemSelected!=sendMessageGroup)))
+			getch();
 	}
+	pthread_cancel(messageBoxCheck);
 }

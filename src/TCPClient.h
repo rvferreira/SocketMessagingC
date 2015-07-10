@@ -14,7 +14,7 @@
 #include "utils.h"
 #include "message.h"
 
-int establishedConnection(char *);
+int establishedConnection(char[]);
 void closeConnectionServer();
 void sendMessage(ServerMessage);
 void receiveMessage(void);

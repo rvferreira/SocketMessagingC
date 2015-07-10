@@ -11,18 +11,14 @@
 
 /* descrição do menu do programa */
 #define USAGE "\
-Usage: " PROGRAM_NAME " [options] IP\n\
+Usage: " PROGRAM_NAME " [options] \n\
 Try \"" PROGRAM_NAME " --help\" for more informations.\n"
 
 #define HELP "\
-Usage: " PROGRAM_NAME " [ServerIP] [options] \n\n\
-Client example: ./" PROGRAM_NAME " 127.0.0.1\n\
-	\tRuns a client program that will connect to a local server\n\
-Server example: ./" PROGRAM_NAME " --server\n\
-	\tRuns a server that will be waiting for connections\n\
+Usage: " PROGRAM_NAME " [options] \n\n\
+Client example: ./" PROGRAM_NAME " \n\
 \n\
 Emulation Options:\n\
-  --server    		runs in server mode\n\
   --debug    		turn on debug prints\n\
 \n\
 Fun fact: You killed the fun.\n"
@@ -41,61 +37,40 @@ Starting " PROGRAM_NAME " in Server Mode. \n"
 #include "server.h"
 #include "client.h"
 
-int processInput(int argc, char** argv, char **option, char **ip);
+int processInput(int argc, char** argv, char **option);
 
 
 int main(int argc, char *argv[]) {
 	char *option = NULL;
-	char *ip = NULL;
 
-	if (processInput(argc, argv, &option, &ip)) {
+	if (processInput(argc, argv, &option)) {
 		printf("%s \n",USAGE);
 		return EXIT_FAILURE;
 	}
 
-	if (!serverMode) {
-		printf("Trying to reach server at %s:%d \n", ip, DEFAULT_PORT);
-		runClient(ip);
+	pthread_t serv;
+	if(pthread_create( &serv , NULL , runServer , (void*) 0) < 0) {
+		perror("could not create thread");
+		exit(1);
 	}
-	else {
-		runServer();
-	}
+
+	runClient();
 
 	return EXIT_SUCCESS;
 }
 
 /* trata a entrada pelos parâmetros passados na execução da entrada */
-int processInput(int argc, char** argv, char **option, char **ip) {
-	*ip = malloc(15*sizeof(char));
+int processInput(int argc, char** argv, char **option) {
 	*option = malloc(15*sizeof(char));
 
     if (argc > 1) {
-        *ip = argv[1];
-
-        if (argv[1][0] == '-') {
-    		*option = argv[1];
-    	}
-
-    }
-    if (argc > 2) {
-        *option = argv[2];
-
-        if (argv[1][0] == '-') {
+		if (argv[1][0] == '-') {
 			*option = argv[1];
-			*ip = argv[2];
 		}
-    }
-
-    if (argc < 2 || argc > 3) {
-        return 1;
     }
 
     /* opção de debug */
     if (!strcmp(*option, "--debug")) {
-    	if (argc < 3) {
-    		printf("%s\n", HELP);
-			exit(1);
-    	}
     	printf("%s\n", "Verbose on.\n");
 		debugMode = 1;
 	}
@@ -105,21 +80,6 @@ int processInput(int argc, char** argv, char **option, char **ip) {
         printf("%s\n", HELP);
         exit(1);
     }
-
-    /* inicializar no modo server */
-    if (!(strcmp(*option, "--server")&&strcmp(*ip, "--server"))) {
-    	if (!strcmp(*ip, "--debug")) {
-			printf("%s\n", "Verbose on.\n");
-			debugMode = 1;
-		}
-
-    	if (argc > 2 && ((argv[1][0] != '-') || (argv[2][0] != '-'))) {
-			printf("%s\n", HELP);
-			exit(1);
-		}
-		printf("%s\n", SERVER_MODE);
-		serverMode = 1;
-	}
 
     return 0;
 }

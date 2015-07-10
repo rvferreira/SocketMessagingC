@@ -22,7 +22,9 @@ int establishedConnection(char ip[])
 
    host = gethostbyname(ip);
    
-
+    if (!strcmp(ip, "0")){
+        return 1;
+    }
    /* cria uma variável do tipo sock */
    if ((sockClient = socket(AF_INET, SOCK_STREAM, 0)) == -1)
    {
@@ -38,7 +40,7 @@ int establishedConnection(char ip[])
    if (connect(sockClient, (struct sockaddr *)&server_addr, sizeof(struct sockaddr)) == -1)
    {
       perror("Server offline");
-      exit(1);
+      return 1;
    }
 
    recv(sockClient,(void *)&recv_data,sizeof(recv_data),0);
@@ -51,7 +53,7 @@ int establishedConnection(char ip[])
    printf("\n %s \n", recv_data.message);
    getchar();
     onlineUsers = malloc (sizeof(OnlineUser));
-   receiveMessage();   
+
   return 0;
 
 }

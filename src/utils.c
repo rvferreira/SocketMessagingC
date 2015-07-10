@@ -17,8 +17,7 @@ char myIP[15];
 int myPort;
 
 OnlineUser *onlineUsers;
-int nOnlineUsers = -1;
-int nContacts = 0;
+int nOnlineUsers = 0;
 
 /*
 void variablesInit(){
@@ -35,21 +34,15 @@ void variablesInit(){
 */
 
 void addOnlineUser(char *ip, int port){
-
-	if (!nOnlineUsers) 
-		onlineUsers = (OnlineUser *)malloc(sizeof(OnlineUser));
-	else 
-		onlineUsers = (OnlineUser *)realloc(onlineUsers, (nOnlineUsers+1) * sizeof(OnlineUser));
+	if (!nOnlineUsers) {
+		onlineUsers = (OnlineUser *) malloc(sizeof(OnlineUser) * BACKLOG);
+	}
 	
 	strcpy(onlineUsers[nOnlineUsers].ip, ip);
-	
 	onlineUsers[nOnlineUsers].port = port;
-	onlineUsers[nOnlineUsers].contact = 0;
-	
-	/* todo usuário começa como válido, se ele cair ele fica 0 */
+	onlineUsers[nOnlineUsers].contact = 1;
 	onlineUsers[nOnlineUsers].valid = 1;
 
-	printf("\n Add User ip: %s \n",onlineUsers[nOnlineUsers].ip);
 	nOnlineUsers++;
 }
 
@@ -58,8 +51,8 @@ void addOnlineUser(char *ip, int port){
 void listOnlineUsers(){
 	int i;
 
-	for (i=0;i<=nOnlineUsers;i++){
-		if(onlineUsers[i].valid) printf("\nUser online Port: %d \n", onlineUsers[i].port);
+	for (i=0;i<nOnlineUsers;i++){
+		if(onlineUsers[i].valid) printf("User %s online at port: %d \n", onlineUsers[i].ip, onlineUsers[i].port);
 	}
 
 }
