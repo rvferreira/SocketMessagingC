@@ -33,9 +33,8 @@ int tryConnect(char ip[]){
 }
 
 /*	Function for text message receiving  */
-void threadReceiveMessage(){	//TODO Different cases for received messages
-	newMessage = setMessage(simpleTextSingleTarget, "myself", "Hello World!");
-	receiveMessage();
+void threadReceiveMessage(char *m){	//TODO Different cases for received messages
+	newMessage = setMessage(simpleTextSingleTarget, "myself", m);
 	sem_post(&newMessage_sem);
 }
 

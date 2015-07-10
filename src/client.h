@@ -16,5 +16,5 @@
 #include <menu.h>
 
 void runClient();
-void threadReceiveMessage();
+void threadReceiveMessage(char *);
 #endif /* CLIENT_H_ */
