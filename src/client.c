@@ -199,7 +199,7 @@ void startApp(){
 				menu_driver(mainMenu, REQ_UP_ITEM);
 				break;
 			case KEY_LEFT: //FOR TESTING
-				threadReceiveMessage();
+				threadReceiveMessage("Hello World");
 				break;
 			case 10: /* Enter */
 				menuItemSelected = atoi(item_name(current_item(mainMenu)));
