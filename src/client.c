@@ -50,8 +50,7 @@ void *insertMessageIntoMessageBox(void *thread_id) {
         free(newMessage);
 
         for (i = MESSAGE_BOX_SIZE - 1; i >= 0; i--) {
-            mvprintw(LINES - 4 - MESSAGE_BOX_SIZE + i, 0, "%s : %s \n", MessageBox[i].origin,
-                     MessageBox[i].message);
+            mvprintw(LINES - 4 - MESSAGE_BOX_SIZE + i, 0, " %s \n", MessageBox[i].message);
         }
         refresh();
     }
