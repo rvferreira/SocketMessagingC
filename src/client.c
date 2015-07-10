@@ -107,8 +107,14 @@ int addContactMethod() {
     }
 
     if (try != NULL) {
-        printf("Contact's already on the list of contacts.\n");
-        return EXIT_FAILURE;
+        if (try->contact == 0){
+            try->contact = 1;
+            printf("Contact successfully added to contact list.\n");
+        }
+        else{
+            printf("Contact's already on the list of contacts.\n");
+            return EXIT_FAILURE;
+        }
     }
     else if (!tryConnect(ip)) {
         addOnlineUser(ip, DEFAULT_PORT);
