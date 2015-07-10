@@ -32,7 +32,6 @@ int tryConnect(char ip[]){
 	return (establishedConnection(ip));
 }
 
-int sender;
 /*	Function for text message receiving  */
 void threadReceiveMessage(char *m){	//TODO Different cases for received messages
 	newMessage = setMessage(simpleTextSingleTarget, "myself", m);
@@ -46,14 +45,12 @@ void *insertMessageIntoMessageBox(void *thread_id){
 		int i;
 		for (i = MESSAGE_BOX_SIZE - 1; i > 0; i--) {
 			copyMessage(&(MessageBox[i]), &(MessageBox[i - 1]));
-			MessageBox[i].port = MessageBox[i-1].port;
 		}
 		copyMessage(&(MessageBox[0]), newMessage);
-		MessageBox[0].port = sender;
 		free(newMessage);
 
 		for (i = MESSAGE_BOX_SIZE - 1; i >= 0; i--) {
-			mvprintw(LINES - 4 - MESSAGE_BOX_SIZE + i, 0, "%s  %s \n", MessageBox[i].port,
+			mvprintw(LINES - 4 - MESSAGE_BOX_SIZE + i, 0, "%s \n",
 					 MessageBox[i].message);
 		}
 		refresh();

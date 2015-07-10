@@ -148,8 +148,8 @@ void *connection_handler(void *sock){
             break;
         }
         else {
-            sender = connected;
             threadReceiveMessage(recv_data);
+
         }
 
         fflush(stdout);

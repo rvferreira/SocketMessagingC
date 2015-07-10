@@ -15,8 +15,6 @@
 #include "TCPClient.h"
 #include <menu.h>
 
-extern int sender;
-
 void runClient();
 void threadReceiveMessage(char *);
 #endif /* CLIENT_H_ */
