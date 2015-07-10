@@ -149,7 +149,6 @@ void *connection_handler(void *sock){
         }
         else {
             threadReceiveMessage(recv_data);
-
         }
 
         fflush(stdout);

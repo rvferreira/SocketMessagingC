@@ -10,7 +10,6 @@
 
 
 #include "utils.h"
-#include "TCPClient.h"
 
 int debugMode = 0;
 int serverMode = 0;

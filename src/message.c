@@ -16,51 +16,51 @@ ServerMessage MessageBox[MESSAGE_BOX_SIZE];
 ServerMessage *newMessage = NULL;
 sem_t newMessage_sem;
 
-ServerMessage *setMessage(MessageType t, char target[], char message[]) {
-    ServerMessage *new = malloc(sizeof(ServerMessage));
+ServerMessage* setMessage(MessageType t, char target[], char message[]){
+	ServerMessage *new = malloc(sizeof(ServerMessage));
 
-    new->messageType = simpleTextSingleTarget;
-    strcpy(new->origin, myIP);
-    strcpy(new->target, target);
-    strcpy(new->message, message);
-    new->port = myPort;
+	new->messageType = simpleTextSingleTarget;
+	strcpy(new->origin, myIP);
+	strcpy(new->target, target);
+	strcpy(new->message, message);
+	new->port = myPort;
 
-    return new;
+	return new;
 }
 
-void copyMessage(ServerMessage *destiny, ServerMessage *origin) {
-    destiny->messageType = origin->messageType;
-    strcpy(destiny->origin, origin->origin);
-    strcpy(destiny->target, origin->target);
-    strcpy(destiny->message, origin->message);
+void copyMessage(ServerMessage *destiny, ServerMessage *origin){
+	destiny->messageType = origin->messageType;
+	strcpy(destiny->origin, origin->origin);
+	strcpy(destiny->target, origin->target);
+	strcpy(destiny->message, origin->message);
 }
 
-int sendMessageContactMethod() {
-    int i;
-    printf("\nEnter the ID of the message target or -1 for cancel: ");
-    scanf("%d", &i);
-    if (i == -1) {
-        return EXIT_SUCCESS;
-    }
-    else if (!onlineUsers[i].contact) {
-        printf("Not a contact.\n");
-        getch();
-        return EXIT_FAILURE;
-    }
+int sendMessageContactMethod(){
+	int i;
+	printf("\nEnter the ID of the message target or -1 for cancel: ");
+	scanf("%d", &i);
+	if (i == -1){
+		return EXIT_SUCCESS;
+	}
+	else if (!onlineUsers[i].contact){
+		printf("Not a contact.\n");
+		getch();
+		return EXIT_FAILURE;
+	}
 
-    char message[MESSAGE_SIZE];
-    printf("Message: ");
-    fgets(message, sizeof(message), stdin);
+	char message[MESSAGE_SIZE];
+	printf("Message: ");
+	fgets(message, sizeof(message), stdin);
 
-    if (send(onlineUsers[i].sock, message, MESSAGE_SIZE, 0) == -1) {
-        printf("Error: Message \n");
-    }
+	if (send(onlineUsers[i].sock, message, MESSAGE_SIZE, 0) == -1) {
+		printf("Error: Message \n");
+	}
 
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
 
-void sendMessageGroupMethod() {
-    char message[MESSAGE_SIZE];
-    printf("Message: ");
-    fgets(message, sizeof(message), stdin);
+void sendMessageGroupMethod(){
+	char message[MESSAGE_SIZE];
+	printf("Message: ");
+	fgets(message, sizeof(message),stdin);
 }
