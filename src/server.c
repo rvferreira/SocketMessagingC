@@ -107,7 +107,8 @@ void *runServer(void *thread_id){
 void *connection_handler(void *sock){
     // captura o descritor de socket 
     int connected = *(int*) sock;
-    ServerMessage recv_data, response_server;
+    ServerMessage response_server;
+    char recv_data[MESSAGE_SIZE];
     int bytes_recv;
 
 
@@ -132,19 +133,13 @@ void *connection_handler(void *sock){
         sleep(1);
 
         // Funcao recv (int socket, void *buffer, size_t size, int flags)        
-        bytes_recv = recv(connected, (void *)&recv_data, sizeof(recv_data), 0);
+        bytes_recv = recv(connected, recv_data, MESSAGE_SIZE, 0);
 
-        if (strcmp(recv_data.message,"close") == 0 && bytes_recv)
+        if (strcmp(recv_data,"close") == 0 && bytes_recv)
         {
             close(connected);
 
             int j;
-
-            for (j=0; j<=nOnlineUsers; j++){
-                if (!strcmp(recv_data.origin, onlineUsers[j].ip)){
-                    onlineUsers[j].valid = 0;
-                }
-            }
 
             listOnlineUsers();
 
@@ -153,8 +148,7 @@ void *connection_handler(void *sock){
             break;
         }
         else {
-            printf("%K: %s", recv_data.message);
-            threadReceiveMessage(recv_data.message);
+            threadReceiveMessage(recv_data);
         }
 
         fflush(stdout);
