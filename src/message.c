@@ -49,9 +49,10 @@ int sendMessageContactMethod() {
     }
 
     char message[MESSAGE_SIZE];
+    getchar();
     printf("Message: ");
     fgets(message, sizeof(message), stdin);
-
+    scanf("%s",message);
     if (send(onlineUsers[i].sock, message, MESSAGE_SIZE, 0) == -1) {
         printf("Error: Message \n");
     }
@@ -60,7 +61,18 @@ int sendMessageContactMethod() {
 }
 
 void sendMessageGroupMethod() {
+    int i;
     char message[MESSAGE_SIZE];
     printf("Message: ");
     fgets(message, sizeof(message), stdin);
+
+    for (i=0; i<nOnlineUsers ; i++){
+        if (onlineUsers[i].contact){
+            if (send(onlineUsers[i].sock, message, MESSAGE_SIZE, 0) == -1) {
+                printf("Error: Message \n");
+            }
+        }
+    }   
+
+    return EXIT_SUCCESS;
 }
