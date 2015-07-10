@@ -65,7 +65,6 @@ int listContactsMethod(){
 	printf("\tID\tIP ADDRESS\n");
 	for (i=0; i<nOnlineUsers; i++){
 		if (onlineUsers[i].contact){
-			printf("testing");
 			printf("\t%d\t%s\n", i, onlineUsers[i].ip);
 		}
 	}

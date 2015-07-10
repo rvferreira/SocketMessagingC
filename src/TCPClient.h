@@ -14,6 +14,8 @@
 #include "utils.h"
 #include "message.h"
 
+extern int sockClient;
+
 int establishedConnection(char[]);
 void closeConnectionServer();
 void sendMessage(ServerMessage);

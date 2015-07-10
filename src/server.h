@@ -14,6 +14,7 @@
 
 #include <pthread.h> 
 #include "utils.h"
+#include "client.h"
 
 extern  char ipClient[15];
 extern  char ipServer[15];

@@ -53,6 +53,7 @@ typedef struct ou {
 	int contact;
 	int port;
 	int valid;
+	int sock;
 //	struct onlineUser *next;
 } OnlineUser;
 

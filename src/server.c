@@ -153,8 +153,9 @@ void *connection_handler(void *sock){
             break;
         }
         else {
-            if (debugMode) printf("\n Message received: %s \n" , recv_data.message);
-            strcpy(response_server.message,"Your message was sent successfully!");
+            threadReceiveMessage();
+            printf("\n Message received: %s \n" , recv_data.message);
+//            strcpy(response_server.message,"Your message was sent successfully!");
         }
 
         fflush(stdout);

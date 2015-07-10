@@ -59,14 +59,18 @@ int sendMessageContactMethod(){
 	printf("Message: ");
 	scanf("%s", message);
 
-	ServerMessage *new = malloc(sizeof(ServerMessage));
-	new->messageType = simpleTextSingleTarget;
-	strcpy(new->origin, myIP);
-	strcpy(new->target, onlineUsers[i].ip);
-	new->port = onlineUsers[i].port;
-	strcpy(new->message, message);
+	if (send(onlineUsers[i].sock, (void *) message, MESSAGE_SIZE, 0) == -1) {
+		printf("Error: Message \n");
+	}
 
-	serverRequest(*new);
+//	ServerMessage *new = malloc(sizeof(ServerMessage));
+//	new->messageType = simpleTextSingleTarget;
+//	strcpy(new->origin, myIP);
+//	strcpy(new->target, onlineUsers[i].ip);
+//	new->port = onlineUsers[i].port;
+//	strcpy(new->message, message);
+//
+//	serverRequest(*new);
 
 	return EXIT_SUCCESS;
 }

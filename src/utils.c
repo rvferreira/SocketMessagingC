@@ -10,6 +10,7 @@
 
 
 #include "utils.h"
+#include "TCPClient.h"
 
 int debugMode = 0;
 int serverMode = 0;
@@ -42,6 +43,7 @@ void addOnlineUser(char *ip, int port){
 	onlineUsers[nOnlineUsers].port = port;
 	onlineUsers[nOnlineUsers].contact = 1;
 	onlineUsers[nOnlineUsers].valid = 1;
+	onlineUsers[nOnlineUsers].sock = sockClient;
 
 	nOnlineUsers++;
 }
